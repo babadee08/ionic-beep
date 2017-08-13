@@ -16,6 +16,22 @@ export class AuthProvider {
     console.log('Hello AuthProvider Provider');
   }
 
+  async createUserWithEmailAndPassword(account: Account) {
+    try {
+      return <LoginResponse> {
+        result: await this.auth.auth.createUserWithEmailAndPassword(account.email, account.password)
+      }
+    } catch (e) {
+      return <LoginResponse> {
+        error: e
+      };
+    }
+  }
+
+  /**
+   * Implement Login
+   * @param account 
+   */
   async signInWithEmailAndPassword(account: Account) {
     try {
       return <LoginResponse> {
