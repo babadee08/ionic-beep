@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
+import { IonicPage, NavController, ToastController } from 'ionic-angular';
 import { LoginResponse } from './../../models/login/login-response.interface';
 
 /**
@@ -16,7 +16,7 @@ import { LoginResponse } from './../../models/login/login-response.interface';
 })
 export class LoginPage {
 
-  constructor(private navCtrl: NavController, private navParams: NavParams, private toast: ToastController) {
+  constructor(private navCtrl: NavController, private toast: ToastController) {
   }
 
   login(event: LoginResponse) {
@@ -25,7 +25,7 @@ export class LoginPage {
         message: `Welcome to Beep, ${event.result.email}`,
         duration: 3000
       }).present();
-      this.navCtrl.setRoot('ProfilePage');
+      this.navCtrl.setRoot('EditProfilePage');
     } else {
       this.toast.create({
         message: event.error.message,
