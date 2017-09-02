@@ -1,5 +1,9 @@
+import { User } from 'firebase/app';
+import { AuthProvider } from './../../providers/auth/auth';
+import { DataProvider } from './../../providers/data/data';
 import { Profile } from './../../models/profile/profile.interface';
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
+import { Subscription } from "rxjs/Subscription";
 
 /**
  * Generated class for the EditProfileFormComponent component.
@@ -11,18 +15,28 @@ import { Component } from '@angular/core';
   selector: 'app-edit-profile-form',
   templateUrl: 'edit-profile-form.html'
 })
-export class EditProfileFormComponent {
+export class EditProfileFormComponent implements OnDestroy {
 
-  profile = {} as Profile
-  text: string;
+  private authenticatedUser$: Subscription;
+  private authenticatedUser: User;
+  profile = {} as Profile;
 
-  constructor() {
-    console.log('Hello EditProfileFormComponent Component');
-    this.text = 'Hello World';
+  constructor(private auth: AuthProvider, private data: DataProvider) {
+    this.authenticatedUser$ = this.auth.getAuthenticatedUser().subscribe((user: User) => {
+      this.authenticatedUser = user;
+    });
   }
 
-  saveProfile() {
+  async saveProfile() {
+    if (this.authenticatedUser) {
+      this.profile.email = this.authenticatedUser.email;
+      const result = await this.data.saveProfile(this.authenticatedUser, this.profile);
+      console.log(result);
+    }
+  }
 
+  ngOnDestroy(): void {
+    this.authenticatedUser$.unsubscribe();
   }
 
 }
